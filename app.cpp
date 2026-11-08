@@ -1,4 +1,7 @@
 #include<iostream>
+#include<sstream>
+#include<iomanip>
+#include<limits>
 
 using namespace std;
 
@@ -6,15 +9,20 @@ class Car {
 private:
     double fuelLevel = 50;
     int maxFuel = 90;
-    int fuelUsage = 8;
+    double fuelUsage = 8;
     double mileage = 0;
     double engineCondition = 100;
     int maxEngineCondition = 100;
-    int engineWear = 1;
-    
+    double engineWear = 1;
+
+    string formatNumber(double number) {
+        stringstream stream;
+        stream << fixed << setprecision(2) << number;
+        return stream.str();
+    }
     
 public:
-    string drive(int kilometers) {
+    string drive(double kilometers) {
         double maxKmFuel = (fuelLevel * 100) / fuelUsage;
         double maxKmEnginge = (engineCondition * 100) / engineWear;
         
@@ -35,12 +43,12 @@ public:
 
         if (actualKm < kilometers) {
             if (actualKm == maxKmFuel && actualKm == maxKmEnginge) {
-                message = "Your vechicle ran out of fuel and has broken engine after: " + to_string(actualKm) + "km";
+                message = "Your vechicle ran out of fuel and has broken engine after: " + formatNumber(actualKm) + "km";
             } else if (actualKm == maxKmFuel) {
-                message = "You ran out of fuel after: " + to_string(actualKm) + "km";
+                message = "You ran out of fuel after: " + formatNumber(actualKm) + "km";
             } else if (actualKm == maxKmEnginge) {
-                message = "Your engine has broken down after: " + to_string(actualKm) + "km";
-            } // TODO: dwa miejsca po przecinku max
+                message = "Your engine has broken down after: " + formatNumber(actualKm) + "km";
+            }
         } else {
             message = "You have arrived your destination";
         }
@@ -58,7 +66,7 @@ public:
             message = "You've exceeded maximum amount of fuel - set to " + to_string(maxFuel) + "l";
         } else {
             fuelLevel += liters;
-            message = "You've filled up the tank with " + to_string(liters) + "l";
+            message = "You've filled up the tank with " + formatNumber(liters) + "l";
         }
 
         return message;
@@ -76,7 +84,6 @@ public:
 
         return message;
     }
-    
 
     double getMileage() { return mileage; }
     double getFuelLevel() { return fuelLevel; }
@@ -84,6 +91,35 @@ public:
     int getMaxFuelLevel() { return maxFuel; }
 };
 
+double getValidDouble(string promptMessage) {
+    double number;
+
+    while (!(cin >> number)) {
+        cout << endl;
+        cout << "Invalid input. Try again..." << endl;
+        cout << promptMessage;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    
+    return number;
+}
+
+int getValidInt(string promptMessage) {
+    int number;
+
+    while (!(cin >> number)) {
+        cout << endl;
+        cout << "Invalid input. Try again..." << endl;
+        cout << promptMessage;
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    
+    return number;
+}
 
 int main(int argc, char const *argv[])
 {
@@ -97,10 +133,11 @@ int main(int argc, char const *argv[])
         cout << "3. Refuel" << endl;
         cout << "4. Fix the engine" << endl;
         cout << "5. Exit" << endl << endl;
-        cout << "Enter a number: ";
 
-        int choice;
-        cin >> choice;
+        string promptMessage = "Enter a number: ";
+        cout << promptMessage;
+        int choice = getValidInt(promptMessage);
+
         switch (choice) {
             case 1: {
                 double mileage = opel.getMileage();            
@@ -109,32 +146,36 @@ int main(int argc, char const *argv[])
                 int maxFuel = opel.getMaxFuelLevel();
 
                 cout << endl << "Car mileage: " << mileage << "km" << endl;
-                cout << "Fuel level: " << fuelLevel << " / " << maxFuel << "l" << endl;
+                cout << "Fuel level: " << fuelLevel << "l" << " / " << maxFuel << "l" << endl;
                 cout << "Engine condition: " << engineCondition << "%" << endl << endl;
+
                 break;
             }
 
             case 2: {
                 cout << endl;
-                cout << "How many kilometers to go?: ";
-                int kilometers;
-                cin >> kilometers;
+                string promptMessage = "How many kilometers to go?: ";
+                cout << promptMessage;
+
+                double kilometers = getValidDouble(promptMessage);
                 cout << endl;
+
                 string message = opel.drive(kilometers);
                 cout << "----------------------------------" << endl;
                 cout << message << endl;
                 cout << "----------------------------------" << endl << endl;
+
                 break;
             }
 
             case 3: {
                 cout << endl;
-                cout << "How many liters to fill?: ";
-                double liters;
-                cin >> liters;
+                string promptMessage = "How many liters to fill?: ";
+                cout << promptMessage;
+
+                double liters = getValidDouble(promptMessage);
                 cout << endl;
                 
-
                 string message = opel.refuel(liters);
                 cout << message << endl << endl;
 
@@ -153,6 +194,7 @@ int main(int argc, char const *argv[])
             
             default:
                 cout << endl;
+        
                 break;
         }
     }
