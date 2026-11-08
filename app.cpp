@@ -4,11 +4,14 @@ using namespace std;
 
 class Car {
 private:
-    double fuelLevel = 90;
+    double fuelLevel = 50;
+    int maxFuel = 90;
+    int fuelUsage = 8;
     double mileage = 0;
     double engineCondition = 100;
-    int fuelUsage = 8;
+    int maxEngineCondition = 100;
     int engineWear = 1;
+    
     
 public:
     string drive(int kilometers) {
@@ -37,7 +40,7 @@ public:
                 message = "You ran out of fuel after: " + to_string(actualKm) + "km";
             } else if (actualKm == maxKmEnginge) {
                 message = "Your engine has broken down after: " + to_string(actualKm) + "km";
-            }
+            } // TODO: dwa miejsca po przecinku max
         } else {
             message = "You have arrived your destination";
         }
@@ -45,9 +48,40 @@ public:
         return message;
     }
 
+    string refuel(double liters) {
+        string message;
+
+        if (liters <= 0) {
+            message = "You can't drink fuel";
+        } else if (liters + fuelLevel >= maxFuel) {
+            fuelLevel = maxFuel;
+            message = "You've exceeded maximum amount of fuel - set to " + to_string(maxFuel) + "l";
+        } else {
+            fuelLevel += liters;
+            message = "You've filled up the tank with " + to_string(liters) + "l";
+        }
+
+        return message;
+    }
+
+    string fixEngine() {
+        string message;
+        
+        if (engineCondition == maxEngineCondition) {
+            message = "Your engine is brand new and doesn't need to be repaired";
+        } else {
+            engineCondition = maxEngineCondition;
+            message = "Your engine have been fixed to 100%";
+        }
+
+        return message;
+    }
+    
+
     double getMileage() { return mileage; }
     double getFuelLevel() { return fuelLevel; }
     double getEngineCondition() { return engineCondition; }
+    int getMaxFuelLevel() { return maxFuel; }
 };
 
 
@@ -60,8 +94,9 @@ int main(int argc, char const *argv[])
     while (true) {
         cout << "1. Show stats" << endl;
         cout << "2. Drive" << endl;
-        cout << "3. Fueling" << endl;
-        cout << "4. Fix the engine" << endl << endl;
+        cout << "3. Refuel" << endl;
+        cout << "4. Fix the engine" << endl;
+        cout << "5. Exit" << endl << endl;
         cout << "Enter a number: ";
 
         int choice;
@@ -71,9 +106,10 @@ int main(int argc, char const *argv[])
                 double mileage = opel.getMileage();            
                 double fuelLevel = opel.getFuelLevel();
                 double engineCondition = opel.getEngineCondition();
+                int maxFuel = opel.getMaxFuelLevel();
 
                 cout << endl << "Car mileage: " << mileage << "km" << endl;
-                cout << "Fuel level: " << fuelLevel << "l" << endl;
+                cout << "Fuel level: " << fuelLevel << " / " << maxFuel << "l" << endl;
                 cout << "Engine condition: " << engineCondition << "%" << endl << endl;
                 break;
             }
@@ -91,7 +127,32 @@ int main(int argc, char const *argv[])
                 break;
             }
 
+            case 3: {
+                cout << endl;
+                cout << "How many liters to fill?: ";
+                double liters;
+                cin >> liters;
+                cout << endl;
+                
+
+                string message = opel.refuel(liters);
+                cout << message << endl << endl;
+
+                break;
+            }
+
+            case 4: {
+                cout << endl;
+                string message = opel.fixEngine();
+                cout << message << endl << endl;
+                
+                break;
+            }
+
+            case 5: return 0;
+            
             default:
+                cout << endl;
                 break;
         }
     }
