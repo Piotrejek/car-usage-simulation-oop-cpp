@@ -35,6 +35,34 @@ int getValidInt(string promptMessage) {
     return number;
 }
 
+void changeCar(Car*& selectedCar) {
+    cout << "0. Passat" << endl;
+    cout << "1. Opel" << endl;
+    cout << "2. Golf" << endl;
+    string promptMessage = "Choose a car: ";
+    cout << promptMessage;
+    int carChoice = getValidInt(promptMessage);
+    cout << endl;
+
+    switch (carChoice) {
+        case 0:
+            selectedCar = &passat;
+            break;
+        
+        case 1:
+            selectedCar = &opel;
+            break;
+
+        case 2:
+            selectedCar = &golf;
+            break;
+
+        default:
+            cout << "Invalid car choice!" << endl << endl;
+            return;
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     cout << "Car Simulation" << endl;
@@ -58,38 +86,7 @@ int main(int argc, char const *argv[])
 
         switch (choice) {
             case 0: {
-                cout << "0. Passat" << endl;
-                cout << "1. Opel" << endl;
-                cout << "2. Golf" << endl;
-                cout << "3. Go back" << endl << endl;
-                string promptMessage = "Choose a car: ";
-                cout << promptMessage;
-                int carChoice = getValidInt(promptMessage);
-                cout << endl;
-
-                switch (carChoice) {
-                    case 0:
-                        selectedCar = &passat;
-
-                        break;
-                    
-                    case 1:
-                        selectedCar = &opel;
-
-                        break;
-
-                    case 2:
-                        selectedCar = &golf;
-
-                        break;
-
-                    case 3:
-                        continue;
-                    
-                    default:
-                        continue;
-                }
-
+                changeCar(selectedCar);
                 break;
             }
 
@@ -104,7 +101,6 @@ int main(int argc, char const *argv[])
                 cout << "Car mileage: " << mileage << "km" << endl;
                 cout << "Fuel level: " << fuelLevel << "l" << " / " << maxFuel << "l" << endl;
                 cout << "Engine condition: " << engineCondition << "%" << endl << endl;
-
                 break;
             }
 
@@ -119,7 +115,6 @@ int main(int argc, char const *argv[])
                 cout << "----------------------------------" << endl;
                 cout << message << endl;
                 cout << "----------------------------------" << endl << endl;
-
                 break;
             }
 
@@ -132,14 +127,12 @@ int main(int argc, char const *argv[])
                 
                 string message = selectedCar->refuel(liters);
                 cout << message << endl << endl;
-
                 break;
             }
 
             case 4: {
                 string message = selectedCar->fixEngine();
                 cout << message << endl << endl;
-                
                 break;
             }
 
@@ -147,7 +140,6 @@ int main(int argc, char const *argv[])
             
             default:
                 cout << endl;
-        
                 break;
         }
     }
