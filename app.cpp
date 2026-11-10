@@ -1,6 +1,7 @@
 #include<iostream>
 #include<limits>
 #include "Car.h"
+#include "Cars.h"
 
 using namespace std;
 
@@ -36,11 +37,14 @@ int getValidInt(string promptMessage) {
 
 int main(int argc, char const *argv[])
 {
-    Car opel;
-
     cout << "Car Simulation" << endl;
 
+    Car* selectedCar = &passat;
+
     while (true) {
+        cout << "Car selected right now: " << selectedCar->getCarName() << endl << endl;
+
+        cout << "0. Change car" << endl;
         cout << "1. Show stats" << endl;
         cout << "2. Drive" << endl;
         cout << "3. Refuel" << endl;
@@ -50,15 +54,54 @@ int main(int argc, char const *argv[])
         string promptMessage = "Enter a number: ";
         cout << promptMessage;
         int choice = getValidInt(promptMessage);
+        cout << endl;
 
         switch (choice) {
-            case 1: {
-                double mileage = opel.getMileage();            
-                double fuelLevel = opel.getFuelLevel();
-                double engineCondition = opel.getEngineCondition();
-                int maxFuel = opel.getMaxFuelLevel();
+            case 0: {
+                cout << "0. Passat" << endl;
+                cout << "1. Opel" << endl;
+                cout << "2. Golf" << endl;
+                cout << "3. Go back" << endl << endl;
+                string promptMessage = "Choose a car: ";
+                cout << promptMessage;
+                int carChoice = getValidInt(promptMessage);
+                cout << endl;
 
-                cout << endl << "Car mileage: " << mileage << "km" << endl;
+                switch (carChoice) {
+                    case 0:
+                        selectedCar = &passat;
+
+                        break;
+                    
+                    case 1:
+                        selectedCar = &opel;
+
+                        break;
+
+                    case 2:
+                        selectedCar = &golf;
+
+                        break;
+
+                    case 3:
+                        continue;
+                    
+                    default:
+                        continue;
+                }
+
+                break;
+            }
+
+            case 1: {
+                string carName = selectedCar->getCarName();
+                double mileage = selectedCar->getMileage();            
+                double fuelLevel = selectedCar->getFuelLevel();
+                double engineCondition = selectedCar->getEngineCondition();
+                int maxFuel = selectedCar->getMaxFuelLevel();
+
+                cout << "Car name: " << carName << endl;
+                cout << "Car mileage: " << mileage << "km" << endl;
                 cout << "Fuel level: " << fuelLevel << "l" << " / " << maxFuel << "l" << endl;
                 cout << "Engine condition: " << engineCondition << "%" << endl << endl;
 
@@ -66,14 +109,13 @@ int main(int argc, char const *argv[])
             }
 
             case 2: {
-                cout << endl;
                 string promptMessage = "How many kilometers to go?: ";
                 cout << promptMessage;
 
                 double kilometers = getValidDouble(promptMessage);
                 cout << endl;
 
-                string message = opel.drive(kilometers);
+                string message = selectedCar->drive(kilometers);
                 cout << "----------------------------------" << endl;
                 cout << message << endl;
                 cout << "----------------------------------" << endl << endl;
@@ -82,22 +124,20 @@ int main(int argc, char const *argv[])
             }
 
             case 3: {
-                cout << endl;
                 string promptMessage = "How many liters to fill?: ";
                 cout << promptMessage;
 
                 double liters = getValidDouble(promptMessage);
                 cout << endl;
                 
-                string message = opel.refuel(liters);
+                string message = selectedCar->refuel(liters);
                 cout << message << endl << endl;
 
                 break;
             }
 
             case 4: {
-                cout << endl;
-                string message = opel.fixEngine();
+                string message = selectedCar->fixEngine();
                 cout << message << endl << endl;
                 
                 break;

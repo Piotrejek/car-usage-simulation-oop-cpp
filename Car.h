@@ -3,23 +3,39 @@
 
 #include <string>
 
+using namespace std;
+
 class Car {
 private:
-    double fuelLevel = 50;
-    int maxFuel = 90;
-    double fuelUsage = 8;
+    int id;
+    string carName;
+    double fuelLevel;
+    int maxFuel;
+    double fuelUsage;
     double mileage = 0;
-    double engineCondition = 100;
+    double engineCondition;
     int maxEngineCondition = 100;
-    double engineWear = 1;
-
-    std::string formatNumber(double number);
-
+    double engineWear;
+    
+    string formatNumber(double number);
+    
 public:
-    std::string drive(double kilometers);
-    std::string refuel(double liters);
-    std::string fixEngine();
-
+    Car(int id, string carName, double fuelLevel, int maxFuel, double fuelUsage, double engineCondition, double engineWear) {
+        this->id = id;
+        this->carName = carName;
+        this->fuelLevel = fuelLevel;
+        this->maxFuel = maxFuel;
+        this->fuelUsage = fuelUsage;
+        this->engineCondition = engineCondition;
+        this->engineWear = engineWear;
+    }
+        
+    string drive(double kilometers);
+    string refuel(double liters);
+    string fixEngine();
+    
+    int getId();
+    string getCarName();
     double getMileage();
     double getFuelLevel();
     double getEngineCondition();

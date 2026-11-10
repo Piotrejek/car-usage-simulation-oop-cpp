@@ -74,6 +74,8 @@ string Car::fixEngine() {
     return message;
 }
 
+int Car::getId() { return id; }
+string Car::getCarName() { return carName; }
 double Car::getMileage() { return mileage; }
 double Car::getFuelLevel() { return fuelLevel; }
 double Car::getEngineCondition() { return engineCondition; }
